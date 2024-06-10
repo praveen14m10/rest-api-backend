@@ -10,6 +10,8 @@ class RegistrationDetail(models.Model):
         return self.user.username
  
  
+ 
+ 
 class GeeksModel(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()

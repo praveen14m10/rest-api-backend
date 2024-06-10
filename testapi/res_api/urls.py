@@ -1,5 +1,6 @@
 from django.contrib import admin
 # include necessary libraries
+
 from django.urls import path, include
 from .views import *  
 from .views import RegisterView, MyTokenObtainPairView
