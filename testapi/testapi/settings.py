@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,7 +28,7 @@ SECRET_KEY = 'django-insecure-xd5jev^h6h20n@ov5^#0x+n$6*j$w(mp$3ms&ss#b#f)p$@rss
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['rest-api-backend-0htc.onrender.com']
+ALLOWED_HOSTS = ['rest-api-backend-0htc.onrender.com','127.0.0.1']
 
 
 # Application definition
@@ -72,6 +73,9 @@ TEMPLATES = [
             ],
         },
     },
+]
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',  # Add your React app's URL here
 ]
 
 WSGI_APPLICATION = 'testapi.wsgi.application'
@@ -145,4 +149,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

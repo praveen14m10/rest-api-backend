@@ -19,7 +19,9 @@ from rest_framework import generics, permissions
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import FileUpload
 from .serializers import FileUploadSerializer
-
+import pandas as pd
+from django.conf import settings
+import os
 # create a viewset
 
 @api_view(['GET'])
@@ -55,3 +57,38 @@ class FileUploadView(generics.CreateAPIView):
     serializer_class = FileUploadSerializer
     permission_classes = (permissions.IsAuthenticated,)
     parser_classes = (MultiPartParser, FormParser)
+
+    def perform_create(self, serializer):
+        file = self.request.FILES['file']
+        # Save the file instance
+        file_instance = serializer.save()
+        
+        # Determine file type and read the file
+        file_path = os.path.join(settings.MEDIA_ROOT, file_instance.file.name)
+        if file.name.endswith('.xlsx'):
+            df = pd.read_excel(file_path)
+        elif file.name.endswith('.ods'):
+            df = pd.read_excel(file_path, engine='odf')
+        else:
+            raise ValueError('Unsupported file type')
+
+        # Iterate over each row and create a new FileUpload instance for each
+        for index, row in df.iterrows():
+            first_name = row.get('First Name', '')
+            last_name = row.get('Last Name', '')
+            email = row.get('Email', '')
+
+            # Create a new FileUpload instance for each row
+            FileUpload.objects.create(
+                file=file_instance.file,  # Use the same file for all instances
+                first_name=first_name,
+                last_name=last_name,
+                email=email
+            )
+        
+        # Optionally, delete the initial file_instance if it's not needed
+        file_instance.delete()
+        
+class FileUploadListView(generics.ListAPIView):
+    queryset = FileUpload.objects.all()
+    serializer_class = FileUploadSerializer

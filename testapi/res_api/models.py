@@ -22,3 +22,11 @@ class GeeksModel(models.Model):
 class FileUpload(models.Model):
     file = models.FileField(upload_to='uploads/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    # Additional fields to store extracted data
+    first_name = models.CharField(max_length=100, blank=True, null=True)
+    last_name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name} - {self.email}'

@@ -34,7 +34,12 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 
+# serializers.py
+
 class FileUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = FileUpload
-        fields = ('id', 'file', 'uploaded_at')
+        fields = ('id', 'first_name', 'last_name', 'email')
+        
+
+
